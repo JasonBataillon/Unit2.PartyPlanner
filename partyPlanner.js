@@ -30,23 +30,6 @@ async function addEvent(event) {
   }
 }
 
-async function updateEvent(event) {
-  try {
-    const response = await fetch(API_URL + event.id, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(event),
-    });
-
-    if (!response.ok) {
-      const responseObj = await response.json();
-      throw new Error(responseObj.error.message);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 async function deleteEvent(id) {
   try {
     const response = await fetch(API_URL + id, {
@@ -64,13 +47,21 @@ async function deleteEvent(id) {
 // === Render ===
 
 function renderEvents() {
-  const events = events.map((event) => {
+  const ul = document.querySelector('ul.events');
+
+  if (!events.length) {
+    ul.innerHTML = `
+    <li>Looks like you just aren't popular enough to party with.</li>`;
+    return;
+  }
+
+  const eventz = events.map((event) => {
     const li = document.createElement('li');
     li.innerHTML = `
         <h2>${event.name}</h2>
-        <h3>${event.location}</h3>
-        <time>${event.date}</time>
+        <time datetime = "${event.date}">${event.date.slice(0, 10)}</time>
         <p>${event.description}</p>
+        <address>${event.location}</address>
         <button>Delete</button>`;
 
     const button = li.querySelector('button');
@@ -81,8 +72,8 @@ function renderEvents() {
     });
     return li;
   });
-  const ul = document.querySelector('ul');
-  ul.replaceChildren(...events);
+
+  ul.replaceChildren(...eventz);
 }
 
 // === Script ===
@@ -96,10 +87,11 @@ const form = document.querySelector('form');
 form.addEventListener('submit', async (event1) => {
   event1.preventDefault();
 
+  const date = new Date(form.date.value).toISOString();
   const event = {
     name: form.name.value,
     description: form.description.value,
-    date: form.date.value,
+    date,
     location: form.location.value,
   };
   await addEvent(event);

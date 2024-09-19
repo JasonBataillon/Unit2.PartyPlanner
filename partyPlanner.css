@@ -1,0 +1,20 @@
+ul {
+  list-style: none;
+  padding-left: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 15rem);
+  gap: 1ch;
+}
+
+li {
+  border: 1px solid black;
+  padding: 1rem;
+}
+form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+label {
+  padding-right: 1rem;
+}
