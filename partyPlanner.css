@@ -3,6 +3,7 @@ ul {
   padding-left: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, 15rem);
+  grid-auto-rows: 15rem;
   gap: 1ch;
 }
 

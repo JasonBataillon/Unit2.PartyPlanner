@@ -4,6 +4,7 @@ const API_URL = `https://fsa-crud-2aa9294fe819.herokuapp.com/api/${COHORT}/event
 // === State ===
 let events = [];
 
+// Updates the state section with events from the API
 async function getEvents() {
   try {
     const response = await fetch(API_URL);
@@ -14,6 +15,7 @@ async function getEvents() {
   }
 }
 
+// Adds new events to the API
 async function addEvent(event) {
   try {
     const response = await fetch(API_URL, {
@@ -30,6 +32,7 @@ async function addEvent(event) {
   }
 }
 
+// Deletes events from the API
 async function deleteEvent(id) {
   try {
     const response = await fetch(API_URL + id, {
@@ -46,15 +49,17 @@ async function deleteEvent(id) {
 
 // === Render ===
 
+//Renders the events on the webpage
 function renderEvents() {
   const ul = document.querySelector('ul.events');
 
+  //Prints this message if no events are rendered.
   if (!events.length) {
     ul.innerHTML = `
     <li>Looks like you just aren't popular enough to party with.</li>`;
     return;
   }
-
+  // Puts the events in the ul section of the html as lists and creates a deleted button for each.
   const eventz = events.map((event) => {
     const li = document.createElement('li');
     li.innerHTML = `
@@ -64,6 +69,7 @@ function renderEvents() {
         <address>${event.location}</address>
         <button>Delete</button>`;
 
+    // Gives the delete button its functionality to delete the selected event from the API
     const button = li.querySelector('button');
     button.addEventListener('click', async () => {
       await deleteEvent(event.id);
@@ -83,10 +89,13 @@ async function initiate() {
 }
 initiate();
 
+//Creates functionality for the form, allowing it to be submitted
 const form = document.querySelector('form');
 form.addEventListener('submit', async (event1) => {
+  //Prevents the page from reloading after the form has been submitted
   event1.preventDefault();
 
+  // Creates a new event using the used input when the from is submitted
   const date = new Date(form.date.value).toISOString();
   const event = {
     name: form.name.value,
